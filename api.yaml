@@ -117,6 +117,36 @@ paths:
                 $ref: '#/components/schemas/Error'
       security:
         - appToken: []
+  /lights/{selector}/toggle:
+    post:
+      summary: Turn off lights if any of them are on, or turn them on if they are all off. All lights matched by the selector will share the same power state after this action. Physically powered off lights are ignored.
+      operationId: togglePower
+      parameters:
+        - name: selector
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          'application/x-www-form-urlencoded':
+            schema:
+              $ref: '#/components/schemas/TogglePowerRequestBody'
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SetStateResponse'
+        'default':
+          description: 'Unexpected error'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+        - appToken: []
 components:
   schemas:
     ListLightsResponse:
@@ -298,6 +328,15 @@ components:
           type: string
         status:
           type: string
+    TogglePowerRequestBody:
+      type: object
+      properties:
+        duration:
+          type: number
+          format: double
+          default: 1.0
+          minimum: 0.0
+          maximum: 3155760000.0
 
     Warning:
       type: object
