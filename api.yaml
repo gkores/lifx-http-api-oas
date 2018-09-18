@@ -147,6 +147,34 @@ paths:
                 $ref: '#/components/schemas/Error'
       security:
         - appToken: []
+  /lights/{selector}/breathe:
+    post:
+      summary: Performs a breathe effect by slowly fading between the given colors. Use the parameters to tweak the effect.
+      operationId: breathe
+      parameters:
+        - name: selector
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          'application/x-www-form-urlencoded':
+            schema:
+              $ref: '#/components/schemas/BreatheEffectRequestBody'
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SetStateResponse'
+        'default':
+          description: 'Unexpected error'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 components:
   schemas:
     ListLightsResponse:
@@ -240,6 +268,54 @@ components:
         kelvin:
           type: number
           format: double
+    TogglePowerRequestBody:
+      type: object
+      properties:
+        duration:
+          type: number
+          format: double
+          default: 1.0
+          minimum: 0.0
+          maximum: 3155760000.0
+    BreatheEffectRequestBody:
+      type: object
+      properties:
+        color:
+          type: string
+        from_color:
+          type: string
+        period:
+          type: number
+          format: double
+          default: 1.0
+        cycles:
+          type: number
+          format: double
+          default: 1.0
+        persist:
+          type: boolean
+          default: false
+        power_on:
+          type: boolean
+          default: true
+        peak:
+          type: number
+          format: double
+          default: 0.5
+          minimum: 0.0
+          maximum: 1.0
+      required:
+        - color
+    SetStateResult:
+      type: object
+      properties:
+        id:
+          type: string
+        label:
+          type: string
+        status:
+          type: string
+
     Light:
       type: object
       properties:
@@ -319,24 +395,6 @@ components:
           type: boolean
         has_multizone:
           type: boolean
-    SetStateResult:
-      type: object
-      properties:
-        id:
-          type: string
-        label:
-          type: string
-        status:
-          type: string
-    TogglePowerRequestBody:
-      type: object
-      properties:
-        duration:
-          type: number
-          format: double
-          default: 1.0
-          minimum: 0.0
-          maximum: 3155760000.0
 
     Warning:
       type: object
