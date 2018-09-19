@@ -175,6 +175,35 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  /lights/{selector}/pulse:
+    post:
+      summary: Performs a pulse effect by quickly flashing between the given colors. Use the parameters to tweak the effect.
+      operationId: pulse
+      parameters:
+        - name: selector
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          'application/x-www-form-urlencoded':
+            schema:
+              $ref: '#/components/schemas/PulseEffectRequestBody'
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SetStateResponse'
+        'default':
+          description: 'Unexpected error'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  
 components:
   schemas:
     ListLightsResponse:
@@ -306,6 +335,29 @@ components:
           default: 0.5
           minimum: 0.0
           maximum: 1.0
+      required:
+        - color
+    PulseEffectRequestBody:
+      type: object
+      properties:
+        color:
+          type: string
+        from_color:
+          type: string
+        period:
+          type: number
+          format: double
+          default: 1.0
+        cycles:
+          type: number
+          format: double
+          default: 1.0
+        persist:
+          type: boolean
+          default: false
+        power_on:
+          type: boolean
+          default: true
       required:
         - color
     SetStateResult:
