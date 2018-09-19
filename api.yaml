@@ -207,6 +207,36 @@ paths:
                 $ref: '#/components/schemas/Error'
       security:
       - appToken: []
+  /lights/{selector}/cycle:
+    post:
+      summary: Performs a pulse effect by quickly flashing between the given colors. Use the parameters to tweak the effect.
+      operationId: cycle
+      parameters:
+        - name: selector
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          'application/x-www-form-urlencoded':
+            schema:
+              $ref: '#/components/schemas/CycleRequestBody'
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SetStateResponse'
+        'default':
+          description: 'Unexpected error'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+      - appToken: []
 components:
   schemas:
     ListLightsResponse:
@@ -363,6 +393,24 @@ components:
           default: true
       required:
         - color
+    CycleRequestBody:
+      type: object
+      properties:
+        states:
+          type: array
+          items:
+            $ref: '#/components/schemas/SetStateRequestBody'
+          minItems: 2
+          maxItems: 10
+        defaults:
+          type: object
+        direction:
+          type: string
+          enum:
+            - forward
+            - backward
+      required:
+        - states
     SetStateResult:
       type: object
       properties:
