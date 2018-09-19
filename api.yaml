@@ -232,6 +232,8 @@ components:
           $ref: '#/components/schemas/SetStateRequestBody'
         fast:
           type: boolean
+      required:
+        - states
     SetStatesResponse:
       type: object
       properties:
