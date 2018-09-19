@@ -175,6 +175,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+      security:
+        - appToken: []
   /lights/{selector}/pulse:
     post:
       summary: Performs a pulse effect by quickly flashing between the given colors. Use the parameters to tweak the effect.
@@ -203,7 +205,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  
+      security:
+      - appToken: []
 components:
   schemas:
     ListLightsResponse:
