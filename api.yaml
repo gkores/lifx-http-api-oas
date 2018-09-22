@@ -237,6 +237,21 @@ paths:
                 $ref: '#/components/schemas/Error'
       security:
       - appToken: []
+  /scenes:
+    get:
+      summary: Lists all the scenes available in the users account.
+      operationId: listScenes
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object #TODO Fix this
+      security:
+        - appToken: []
 components:
   schemas:
     ListLightsResponse:
