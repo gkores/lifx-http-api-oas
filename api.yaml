@@ -247,9 +247,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  type: object #TODO Fix this
+                $ref: '#/components/schemas/ListScenesResponse'
       security:
         - appToken: []
 components:
@@ -435,6 +433,10 @@ components:
           type: string
         status:
           type: string
+    ListScenesResponse:
+      type: array
+      items:  
+        $ref: '#/components/schemas/Scene'
 
     Light:
       type: object
@@ -515,6 +517,57 @@ components:
           type: boolean
         has_multizone:
           type: boolean
+    Scene:
+      type: object
+      properties:
+        uuid:
+          type: string
+        name:
+          type: string
+        account:
+          type: object
+          properties:
+            uuid:
+              type: string
+        states:
+          type: array
+          items:
+            type: object # TODO Fix this
+            properties:
+              selector:
+                type: string
+              power:
+                type: string
+                enum:
+                  - 'on'
+                  - 'off'
+              brightness:
+                type: number
+                format: double
+                min: 0.0
+                max: 1.0
+              color:
+                type: object
+                  properties:
+                    hue:
+                      type: number
+                      format: integer
+                      min: 0
+                      max: 360
+                    saturation:
+                      type: number
+                      format: double
+                      min: 0.0
+                      max: 1.0
+                    kelvin:
+                      type: number
+                      format: integer
+                      min: 1500
+                      max: 9000
+        created_at:
+          type: number
+        updated_at:
+          type: number
 
     Warning:
       type: object
