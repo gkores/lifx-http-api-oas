@@ -282,6 +282,31 @@ paths:
                 $ref: '#/components/schemas/Error'
       security:
         - appToken: []
+  /color:
+    get:
+      summary: This endpoint lets you validate a user's color string and return the hue, saturation, brightness and kelvin values that the API will interpret as.
+      operationId: validateColor
+      parameters:
+        - name: string
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: 'Success'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidateColorResponse'
+        422:
+          description: 'Unprocessable entity'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+        - appToken: []
 
 components:
   schemas:
@@ -493,6 +518,21 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/SetStateResult'
+    ValidateColorResponse:
+      type: object
+      properties:
+        hue:
+          type: number
+          format: double
+        brightness:
+          type: number
+          format: double
+        saturation:
+          type: number
+          format: double
+        kelvin:
+          type: number
+          format: integer
 
     Light:
       type: object
