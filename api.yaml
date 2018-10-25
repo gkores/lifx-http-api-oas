@@ -250,6 +250,39 @@ paths:
                 $ref: '#/components/schemas/ListScenesResponse'
       security:
         - appToken: []
+  /scenes/scene_id::{scene_uuid}/activate:
+    put:
+      summary: Activates a scene from the users account
+      operationId: activateScene
+      parameters:
+        - name: scene_uuid
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          'application/x-www-form-urlencoded':
+            schema:
+              $ref: '#/components/schemas/ActivateSceneRequestBody'
+      responses:
+        200:
+          description: 'Success'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActivateSceneResponse'
+        202:
+          description: 'Accepted'
+        'default':
+          description: 'Unexpected error'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+        - appToken: []
+
 components:
   schemas:
     ListLightsResponse:
@@ -437,6 +470,29 @@ components:
       type: array
       items:  
         $ref: '#/components/schemas/Scene'
+    ActivateSceneRequestBody:
+      type: object
+      properties:
+        duration:
+          type: number
+          format: double
+          default: 1.0
+        ignore:
+          type: array
+          items:
+            type: string
+        overrides:
+          $ref: '#/components/schemas/SetStateRequestBody'
+        fast:
+          type: boolean
+          default: false
+    ActivateSceneResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/SetStateResult'
 
     Light:
       type: object
@@ -532,7 +588,7 @@ components:
         states:
           type: array
           items:
-            type: object # TODO Fix this
+            type: object
             properties:
               selector:
                 type: string
@@ -544,26 +600,26 @@ components:
               brightness:
                 type: number
                 format: double
-                min: 0.0
-                max: 1.0
+                minimum: 0.0
+                maximum: 1.0
               color:
                 type: object
-                  properties:
-                    hue:
-                      type: number
-                      format: integer
-                      min: 0
-                      max: 360
-                    saturation:
-                      type: number
-                      format: double
-                      min: 0.0
-                      max: 1.0
-                    kelvin:
-                      type: number
-                      format: integer
-                      min: 1500
-                      max: 9000
+                properties:
+                  hue:
+                    type: number
+                    format: integer
+                    minimum: 0
+                    maximum: 360
+                  saturation:
+                    type: number
+                    format: double
+                    minimum: 0.0
+                    maximum: 1.0
+                  kelvin:
+                    type: number
+                    format: integer
+                    minimum: 1500
+                    maximum: 9000
         created_at:
           type: number
         updated_at:
